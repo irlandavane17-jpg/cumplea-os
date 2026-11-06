@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8dde5">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23f8dde5'/%3E%3Cpath d='M8 47h48L52 25l-12 11-8-22-9 22-12-11z' fill='%23d6b46a' stroke='%23a90f27' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='43' r='4' fill='%23fffaf7'/%3E%3C/svg%3E">
+  <title>Un cuento mágico para Tessa</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cherry: #d71935;
+      --deep-red: #a90f27;
+      --blush: #f8dde5;
+      --princess-pink: #efa7bc;
+      --gold: #d6b46a;
+      --ink: #252020;
+      --cream: #fffaf7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(ellipse at 50% 12%, rgba(255,255,255,.92), transparent 35%),
+        linear-gradient(180deg, #f8dce6 0%, #f5cbd8 54%, #f9e9dc 100%);
+    }
+
+    button { font: inherit; }
+
+    .invitation {
+      position: relative;
+      display: grid;
+      min-height: 100svh;
+      place-items: center;
+      padding: 38px 20px 34px;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .invitation::before,
+    .invitation::after {
+      position: absolute;
+      z-index: -1;
+      content: "";
+      pointer-events: none;
+    }
+
+    .invitation::before {
+      inset: 0;
+      opacity: .7;
+      background-image:
+        radial-gradient(2px 2px at 11% 22%, #fff 60%, transparent 65%),
+        radial-gradient(3px 3px at 82% 17%, #fff 60%, transparent 65%),
+        radial-gradient(2px 2px at 73% 68%, #fff 60%, transparent 65%),
+        radial-gradient(2px 2px at 18% 72%, #fff 60%, transparent 65%),
+        radial-gradient(3px 3px at 91% 49%, #fff 60%, transparent 65%),
+        radial-gradient(2px 2px at 31% 12%, #fff 60%, transparent 65%);
+      animation: twinkle 3s ease-in-out infinite alternate;
+    }
+
+    .invitation::after {
+      right: -9rem;
+      bottom: -16rem;
+      left: -9rem;
+      height: 24rem;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(180deg, #eab1bf, #f2c8ce);
+      box-shadow: 0 -12px 45px rgba(185, 90, 116, .1);
+    }
+
+    .scene {
+      position: relative;
+      width: min(100%, 900px);
+      min-height: 740px;
+      padding: 35px 24px 24px;
+      text-align: center;
+      border: 1px solid rgba(214, 180, 106, .64);
+      border-radius: 48% 48% 34px 34px / 18% 18% 34px 34px;
+      background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.08));
+      box-shadow: 0 20px 70px rgba(137, 54, 75, .12), inset 0 0 0 7px rgba(255,255,255,.2);
+    }
+
+    .scene::before {
+      position: absolute;
+      inset: 9px;
+      z-index: -1;
+      border: 1px solid rgba(255,255,255,.52);
+      border-radius: inherit;
+      content: "";
+      pointer-events: none;
+    }
+
+    .bow {
+      position: relative;
+      width: 84px;
+      height: 48px;
+      margin: 0 auto 15px;
+      filter: drop-shadow(0 4px 3px rgba(131, 18, 38, .2));
+    }
+
+    .bow::before,
+    .bow::after {
+      position: absolute;
+      top: 3px;
+      width: 39px;
+      height: 37px;
+      border: 2px solid #a90f27;
+      border-radius: 70% 30% 65% 35%;
+      background-color: var(--cherry);
+      background-image: radial-gradient(circle, #fff 0 2.4px, transparent 2.8px);
+      background-size: 13px 13px;
+      content: "";
+    }
+
+    .bow::before { left: 3px; transform: rotate(24deg); }
+    .bow::after { right: 3px; transform: scaleX(-1) rotate(24deg); }
+
+    .bow-knot {
+      position: absolute;
+      top: 15px;
+      left: 34px;
+      z-index: 1;
+      width: 16px;
+      height: 19px;
+      border: 2px solid #a90f27;
+      border-radius: 45%;
+      background: var(--cherry);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #9c5466;
+      font-family: Georgia, serif;
+      font-size: .82rem;
+      font-style: italic;
+      letter-spacing: .16em;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--deep-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 500;
+      line-height: 1.12;
+      text-shadow: 0 2px 0 rgba(255,255,255,.7);
+    }
+
+    .intro {
+      max-width: 540px;
+      margin: 12px auto 0;
+      color: #5e4148;
+      font-family: Georgia, serif;
+      font-size: clamp(1rem, 2.3vw, 1.18rem);
+      line-height: 1.55;
+    }
+
+    .castle-wrap {
+      position: relative;
+      width: min(100%, 680px);
+      margin: 2px auto -4px;
+    }
+
+    .castle {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    .castle-shimmer {
+      transform-origin: center;
+      animation: castle-glow 3.5s ease-in-out infinite alternate;
+    }
+
+    .door {
+      transform-box: fill-box;
+      transition: transform 1.15s cubic-bezier(.2,.75,.22,1);
+    }
+
+    .door-left { transform-origin: left center; }
+    .door-right { transform-origin: right center; }
+    .is-open .door-left { transform: perspective(500px) rotateY(-112deg); }
+    .is-open .door-right { transform: perspective(500px) rotateY(112deg); }
+
+    .minnie {
+      position: absolute;
+      right: -20px;
+      bottom: 6%;
+      width: clamp(100px, 17vw, 155px);
+      height: auto;
+      border: 2px solid rgba(214, 180, 106, .85);
+      border-radius: 48% 48% 18px 18px / 18% 18% 14px 14px;
+      background: var(--cream);
+      box-shadow: 0 7px 18px rgba(80, 42, 46, .16);
+      animation: bob 3.8s ease-in-out infinite;
+    }
+
+    .path-flowers {
+      position: absolute;
+      bottom: 2%;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 8% 60%, #fff8f3 0 5px, transparent 6px),
+        radial-gradient(circle at 9.5% 56%, #f2a9bf 0 4px, transparent 5px),
+        radial-gradient(circle at 91% 66%, #fff8f3 0 5px, transparent 6px),
+        radial-gradient(circle at 89.5% 62%, #f2a9bf 0 4px, transparent 5px),
+        radial-gradient(circle at 19% 75%, #d71935 0 4px, transparent 5px),
+        radial-gradient(circle at 80% 78%, #d71935 0 4px, transparent 5px);
+    }
+
+    .enter-button {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 28px;
+      border: 1px solid #f4d988;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #d71935, #a90f27);
+      box-shadow: 0 7px 0 #850c21, 0 12px 25px rgba(169, 15, 39, .22);
+      cursor: pointer;
+      font-size: .88rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .enter-button[hidden] { display: none; }
+
+    .enter-button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+      box-shadow: 0 9px 0 #850c21, 0 15px 28px rgba(169, 15, 39, .25);
+    }
+
+    .enter-button:active {
+      transform: translateY(3px);
+      box-shadow: 0 4px 0 #850c21, 0 8px 18px rgba(169, 15, 39, .2);
+    }
+
+    .enter-button:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 5px;
+    }
+
+    .welcome {
+      min-height: 1.7em;
+      margin: 16px 0 0;
+      color: var(--deep-red);
+      font-family: Georgia, serif;
+      font-size: clamp(1.1rem, 2.7vw, 1.45rem);
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .welcome.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .welcome span { color: #b78129; }
+
+    .entry-screen[hidden],
+    .celebration-view[hidden],
+    .memory-gallery[hidden] { display: none; }
+
+    .celebration-view {
+      max-width: 760px;
+      margin: 24px auto 0;
+      animation: reveal .7s ease both;
+    }
+
+    .celebration-view h2,
+    .memory-gallery h2 {
+      margin: 0;
+      color: var(--deep-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      font-weight: 500;
+    }
+
+    .celebration-intro {
+      margin: 8px 0 24px;
+      color: #704451;
+      font-family: Georgia, serif;
+      font-size: 1.08rem;
+    }
+
+    .portrait-card {
+      position: relative;
+      width: min(100%, 410px);
+      margin: 0 auto 24px;
+      padding: 10px 10px 15px;
+      border: 1px solid rgba(214, 180, 106, .8);
+      border-radius: 22px;
+      background: rgba(255, 250, 247, .88);
+      box-shadow: 0 14px 35px rgba(137, 54, 75, .16);
+      transform: rotate(-1deg);
+    }
+
+    .portrait-card::before {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      width: 78px;
+      height: 24px;
+      border: 1px solid rgba(214, 180, 106, .7);
+      background: rgba(248, 221, 229, .86);
+      content: "";
+      transform: translateX(-50%) rotate(2deg);
+    }
+
+    .portrait-card img {
+      display: block;
+      width: 100%;
+      max-height: 520px;
+      border-radius: 14px;
+      object-fit: cover;
+      object-position: center 28%;
+    }
+
+    .portrait-caption {
+      margin: 12px 0 0;
+      color: #8d4258;
+      font-family: Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+    }
+
+    .theme-label {
+      display: inline-block;
+      margin: 0 0 18px;
+      padding: 8px 16px;
+      border: 1px solid rgba(214, 180, 106, .65);
+      border-radius: 999px;
+      color: #8b4055;
+      background: rgba(255, 255, 255, .55);
+      font-size: .85rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .party-details {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 630px;
+      margin: 0 auto 21px;
+      text-align: left;
+    }
+
+    .detail-card {
+      padding: 16px 18px;
+      border: 1px solid rgba(214, 180, 106, .55);
+      border-radius: 18px;
+      background: rgba(255, 250, 247, .76);
+      box-shadow: 0 6px 17px rgba(137, 54, 75, .07);
+    }
+
+    .detail-card h3 {
+      margin: 0 0 6px;
+      color: #a05266;
+      font-size: .79rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .detail-card p {
+      margin: 0;
+      color: #422d33;
+      font-family: Georgia, serif;
+      font-size: 1.02rem;
+      line-height: 1.5;
+    }
+
+    .detail-card--address { grid-column: 1 / -1; }
+
+    .party-closing {
+      margin: 16px 0 20px;
+      color: var(--deep-red);
+      font-family: Georgia, serif;
+      font-size: clamp(1.45rem, 4vw, 2rem);
+      font-weight: 700;
+    }
+
+    .party-closing span {
+      display: block;
+      margin-top: 5px;
+      color: #734555;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      font-size: .94rem;
+      font-weight: 600;
+    }
+
+    .gallery-button {
+      margin-top: 2px;
+    }
+
+    .memory-gallery {
+      max-width: 800px;
+      margin: 42px auto 0;
+      padding: 30px 0 10px;
+      border-top: 1px solid rgba(214, 180, 106, .6);
+      animation: reveal .55s ease both;
+      scroll-margin-top: 24px;
+    }
+
+    .memory-gallery h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); }
+
+    .gallery-intro {
+      margin: 8px 0 22px;
+      color: #704451;
+      font-family: Georgia, serif;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .photo-card {
+      margin: 0;
+      padding: 7px 7px 10px;
+      border: 1px solid rgba(214, 180, 106, .58);
+      border-radius: 14px;
+      background: rgba(255, 250, 247, .9);
+      box-shadow: 0 7px 18px rgba(137, 54, 75, .1);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-4px) rotate(-1deg);
+      box-shadow: 0 12px 22px rgba(137, 54, 75, .15);
+    }
+
+    .photo-card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 9px;
+      background: var(--blush);
+      object-fit: cover;
+    }
+
+    .photo-card figcaption {
+      padding-top: 7px;
+      color: #8d4258;
+      font-family: Georgia, serif;
+      font-size: .87rem;
+      font-style: italic;
+    }
+
+    .back-button {
+      margin-top: 24px;
+      border-color: rgba(169, 15, 39, .38);
+      color: var(--deep-red);
+      background: rgba(255, 255, 255, .72);
+      box-shadow: 0 5px 0 rgba(169, 15, 39, .2);
+    }
+
+    .back-button:hover {
+      box-shadow: 0 7px 0 rgba(169, 15, 39, .2), 0 12px 22px rgba(169, 15, 39, .12);
+    }
+
+    .sparkle {
+      position: absolute;
+      color: #fff;
+      text-shadow: 0 0 12px rgba(255,255,255,.9);
+      pointer-events: none;
+      animation: twinkle 2.3s ease-in-out infinite alternate;
+    }
+
+    .sparkle-one { top: 26%; left: 10%; font-size: 1.8rem; }
+    .sparkle-two { top: 35%; right: 12%; animation-delay: .6s; }
+    .sparkle-three { top: 12%; right: 22%; font-size: 1.2rem; animation-delay: 1s; }
+
+    .balloon {
+      position: absolute;
+      z-index: -1;
+      top: 45%;
+      width: 34px;
+      height: 44px;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 50% 50% 48% 48%;
+      background: linear-gradient(135deg, #fff, #efa7bc);
+      box-shadow: inset -5px -5px 9px rgba(160, 60, 85, .12), 0 5px 12px rgba(150, 70, 90, .1);
+      animation: bob 4s ease-in-out infinite;
+    }
+
+    .balloon::after {
+      position: absolute;
+      top: 42px;
+      left: 50%;
+      width: 1px;
+      height: 55px;
+      background: rgba(130, 74, 82, .35);
+      content: "";
+    }
+
+    .balloon-left { left: 4%; }
+    .balloon-right {
+      top: 50%;
+      right: 3%;
+      background: linear-gradient(135deg, #fff, #e9445c);
+      animation-delay: .8s;
+    }
+
+    @keyframes twinkle {
+      from { opacity: .48; transform: scale(.92); }
+      to { opacity: 1; transform: scale(1.06); }
+    }
+
+    @keyframes castle-glow {
+      from { filter: drop-shadow(0 0 1px rgba(255,255,255,.2)); }
+      to { filter: drop-shadow(0 0 9px rgba(255,255,255,.7)); }
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-9px) rotate(2deg); }
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .invitation { padding: 22px 12px; }
+      .scene {
+        min-height: 0;
+        padding: 28px 14px 25px;
+        border-radius: 46% 46% 24px 24px / 10% 10% 24px 24px;
+      }
+      .bow { margin-bottom: 12px; }
+      .castle-wrap { margin-top: 20px; margin-bottom: 7px; }
+      .minnie { right: -4px; bottom: 1%; width: clamp(86px, 24vw, 125px); }
+      .path-flowers { bottom: 0; }
+      .sparkle-one { left: 3%; }
+      .sparkle-two { right: 3%; }
+      .balloon-left { left: 0; }
+      .balloon-right { right: 0; }
+      .party-details { grid-template-columns: 1fr; }
+      .detail-card--address { grid-column: auto; }
+      .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .celebration-view { margin-top: 18px; }
+      .portrait-card img { max-height: 450px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="invitation">
+    <span class="sparkle sparkle-one" aria-hidden="true">✦</span>
+    <span class="sparkle sparkle-two" aria-hidden="true">✧</span>
+    <span class="sparkle sparkle-three" aria-hidden="true">✦</span>
+    <span class="balloon balloon-left" aria-hidden="true"></span>
+    <span class="balloon balloon-right" aria-hidden="true"></span>
+
+    <section class="scene" aria-labelledby="invitation-title">
+      <div class="entry-screen" id="entry-screen">
+      <div class="bow" aria-hidden="true"><span class="bow-knot"></span></div>
+      <p class="eyebrow">Una invitación muy especial</p>
+      <h1 id="invitation-title">¡Estás invitado a<br>un cuento mágico!</h1>
+      <p class="intro">Una pequeña princesa está por celebrar un día muy especial...</p>
+
+      <div class="castle-wrap" id="castle">
+        <svg class="castle" viewBox="0 0 900 600" role="img" aria-labelledby="castle-title">
+          <title id="castle-title">Un castillo rosa de cuento con sus puertas cerradas</title>
+          <defs>
+            <linearGradient id="wall" x1="0" x2="0.9" y1="0" y2="1">
+              <stop offset="0" stop-color="#fff5f1"/>
+              <stop offset="1" stop-color="#eaa1b3"/>
+            </linearGradient>
+            <linearGradient id="roof" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#e84b63"/>
+              <stop offset="1" stop-color="#a90f27"/>
+            </linearGradient>
+            <linearGradient id="door" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" stop-color="#a90f27"/>
+              <stop offset=".5" stop-color="#d71935"/>
+              <stop offset="1" stop-color="#a90f27"/>
+            </linearGradient>
+            <radialGradient id="light">
+              <stop offset="0" stop-color="#fff9db" stop-opacity=".95"/>
+              <stop offset="1" stop-color="#fff9db" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="450" cy="555" rx="340" ry="24" fill="#c98291" opacity=".22"/>
+          <g class="castle-shimmer">
+            <path d="M183 548V282h118v266M599 548V282h118v266" fill="url(#wall)" stroke="#d6b46a" stroke-width="5"/>
+            <path d="M165 290h154l-77-137zM581 290h154l-77-137z" fill="url(#roof)" stroke="#a90f27" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M217 158V121h21v37m397 0v-37h21v37" fill="#d71935" stroke="#a90f27" stroke-width="4"/>
+            <path d="M232 157l-5-15h20l-5 15m397 0-5-15h20l-5 15" fill="#d6b46a"/>
+            <path d="M301 548V310q149-120 298 0v238z" fill="url(#wall)" stroke="#d6b46a" stroke-width="5"/>
+            <path d="M324 310q126-109 252 0l-20 18q-106-92-212 0z" fill="#fff5f1" opacity=".8"/>
+            <path d="M340 301V218l110-117 110 117v83" fill="url(#roof)" stroke="#a90f27" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M440 100V66h20v34" fill="#d71935" stroke="#a90f27" stroke-width="4"/>
+            <path d="M450 55l-13 13h26z" fill="#d6b46a"/>
+            <circle cx="450" cy="232" r="73" fill="url(#light)"/>
+            <path d="M368 251a13 13 0 0 1 26 0v31h-26zm138 0a13 13 0 0 1 26 0v31h-26z" fill="#fff4c9" stroke="#d6b46a" stroke-width="3"/>
+            <path d="M209 356a20 20 0 0 1 40 0v48h-40zm435 0a20 20 0 0 1 40 0v48h-40z" fill="#fff4c9" stroke="#d6b46a" stroke-width="4"/>
+            <path d="M208 380h42m434 0h-42M368 267h26m112 0h26" stroke="#d6b46a" stroke-width="3"/>
+            <path d="M321 548V472h36v76m222 0V472h36v76" fill="#d9869d" opacity=".45"/>
+            <path d="M386 548V430a64 64 0 0 1 128 0v118z" fill="#fff1d2" stroke="#d6b46a" stroke-width="5"/>
+            <path d="M397 548V432a53 53 0 0 1 106 0v116z" fill="#76213a"/>
+            <path d="M400 548V432a50 50 0 0 1 50-50v166z" fill="url(#door)" stroke="#f4d98e" stroke-width="3" class="door door-left"/>
+            <path d="M500 548V382a50 50 0 0 1 50 50v116z" fill="url(#door)" stroke="#f4d98e" stroke-width="3" class="door door-right"/>
+            <path d="M408 548V433a42 42 0 0 1 42-42v157m58 0V391a42 42 0 0 1 42 42v115" fill="none" stroke="#f1b3bd" stroke-width="2" opacity=".7"/>
+            <circle cx="442" cy="467" r="4" fill="#f8e5a5"/>
+            <circle cx="458" cy="467" r="4" fill="#f8e5a5"/>
+            <circle cx="492" cy="467" r="4" fill="#f8e5a5"/>
+            <circle cx="508" cy="467" r="4" fill="#f8e5a5"/>
+            <path d="M174 548h552" stroke="#d6b46a" stroke-width="8" stroke-linecap="round"/>
+          </g>
+          <path d="M412 554q38-16 76 0 34 14 67 0" fill="none" stroke="#fff5e8" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+          <g fill="#fff9eb">
+            <circle cx="126" cy="513" r="6"/><circle cx="137" cy="507" r="6"/><circle cx="148" cy="513" r="6"/><circle cx="137" cy="519" r="6"/>
+            <circle cx="750" cy="500" r="6"/><circle cx="761" cy="494" r="6"/><circle cx="772" cy="500" r="6"/><circle cx="761" cy="506" r="6"/>
+            <circle cx="286" cy="530" r="5"/><circle cx="614" cy="528" r="5"/>
+          </g>
+          <g fill="#d71935">
+            <circle cx="137" cy="513" r="3"/><circle cx="761" cy="500" r="3"/>
+          </g>
+        </svg>
+        <div class="path-flowers" aria-hidden="true"></div>
+        <img class="minnie" src="mimi%20roja.jpg" alt="Minnie con su vestido rojo de lunares blancos">
+      </div>
+
+      <button class="enter-button" id="enter-button" type="button" aria-controls="castle">
+        <span aria-hidden="true">✧</span> ENTRAR AL CASTILLO <span aria-hidden="true">✧</span>
+      </button>
+      <p class="welcome" id="welcome-message" aria-live="polite"></p>
+      </div>
+
+      <section class="celebration-view" id="celebration-view" aria-labelledby="celebration-title" hidden>
+        <p class="eyebrow">¡Las puertas se abren para ti!</p>
+        <h2 id="celebration-title">¡Tessa cumple 6 años!</h2>
+        <p class="celebration-intro">Ven a celebrar conmigo un día lleno de magia y alegría.</p>
+
+        <figure class="portrait-card">
+          <img src="foto%2014.jpg" alt="Tessa con su vestido rojo de lunares para celebrar su cumpleaños">
+          <figcaption class="portrait-caption">Nuestra princesa cumpleañera</figcaption>
+        </figure>
+
+        <p class="theme-label">Una celebración mágica de Minnie Mouse</p>
+
+        <div class="party-details">
+          <article class="detail-card">
+            <h3>Cuándo</h3>
+            <p>Domingo 6 de diciembre<br>3:00 p. m.</p>
+          </article>
+          <article class="detail-card">
+            <h3>Dónde</h3>
+            <p>Fiestas Bambino’s<br>Salón Infantil</p>
+          </article>
+          <article class="detail-card detail-card--address">
+            <h3>Dirección</h3>
+            <p>Calle Luis Rocha No. 241<br>Zona Centro<br>San Francisco del Rincón, Gto.</p>
+          </article>
+        </div>
+
+        <p class="party-closing">¡No faltes!<span>Por favor, confirma tu asistencia.</span></p>
+
+        <button class="enter-button gallery-button" id="gallery-button" type="button" aria-controls="memory-gallery" aria-expanded="false">
+          <span aria-hidden="true">✧</span> VER LA GALERÍA DE TESSA <span aria-hidden="true">✧</span>
+        </button>
+
+        <section class="memory-gallery" id="memory-gallery" aria-labelledby="gallery-title" hidden>
+          <h2 id="gallery-title">Un cuento en 13 recuerdos</h2>
+          <p class="gallery-intro">Pequeños momentos de la princesa Tessa.</p>
+          <div class="photo-grid">
+            <figure class="photo-card"><img src="foto%201.jpg" alt="Tessa, recuerdo 1" loading="lazy"><figcaption>Recuerdo 1</figcaption></figure>
+            <figure class="photo-card"><img src="foto%202.jpg" alt="Tessa, recuerdo 2" loading="lazy"><figcaption>Recuerdo 2</figcaption></figure>
+            <figure class="photo-card"><img src="foto%203.jpg" alt="Tessa, recuerdo 3" loading="lazy"><figcaption>Recuerdo 3</figcaption></figure>
+            <figure class="photo-card"><img src="foto%204.jpg" alt="Tessa, recuerdo 4" loading="lazy"><figcaption>Recuerdo 4</figcaption></figure>
+            <figure class="photo-card"><img src="foto%205.jpg" alt="Tessa, recuerdo 5" loading="lazy"><figcaption>Recuerdo 5</figcaption></figure>
+            <figure class="photo-card"><img src="foto%206.jpg" alt="Tessa, recuerdo 6" loading="lazy"><figcaption>Recuerdo 6</figcaption></figure>
+            <figure class="photo-card"><img src="foto%207.jpg" alt="Tessa, recuerdo 7" loading="lazy"><figcaption>Recuerdo 7</figcaption></figure>
+            <figure class="photo-card"><img src="foto%208.jpg" alt="Tessa, recuerdo 8" loading="lazy"><figcaption>Recuerdo 8</figcaption></figure>
+            <figure class="photo-card"><img src="foto%209.jpg" alt="Tessa, recuerdo 9" loading="lazy"><figcaption>Recuerdo 9</figcaption></figure>
+            <figure class="photo-card"><img src="foto%2010.jpg" alt="Tessa, recuerdo 10" loading="lazy"><figcaption>Recuerdo 10</figcaption></figure>
+            <figure class="photo-card"><img src="foto%2011.jpg" alt="Tessa, recuerdo 11" loading="lazy"><figcaption>Recuerdo 11</figcaption></figure>
+            <figure class="photo-card"><img src="foto%2012.jpg" alt="Tessa, recuerdo 12" loading="lazy"><figcaption>Recuerdo 12</figcaption></figure>
+            <figure class="photo-card"><img src="foto%2013.jpg" alt="Tessa, recuerdo 13" loading="lazy"><figcaption>Recuerdo 13</figcaption></figure>
+          </div>
+          <button class="enter-button back-button" id="back-button" type="button">
+            <span aria-hidden="true">↟</span> VOLVER A LA INVITACIÓN
+          </button>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const castle = document.querySelector("#castle");
+    const enterButton = document.querySelector("#enter-button");
+    const welcomeMessage = document.querySelector("#welcome-message");
+    const entryScreen = document.querySelector("#entry-screen");
+    const celebrationView = document.querySelector("#celebration-view");
+    const galleryButton = document.querySelector("#gallery-button");
+    const memoryGallery = document.querySelector("#memory-gallery");
+    const backButton = document.querySelector("#back-button");
+
+    enterButton.addEventListener("click", () => {
+      castle.classList.add("is-open");
+      enterButton.disabled = true;
+      enterButton.setAttribute("aria-label", "Las puertas del castillo están abiertas");
+      const animationDelay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1150;
+      window.setTimeout(() => {
+        welcomeMessage.innerHTML = "¡Bienvenida al castillo de <span>Tessa</span>!";
+        welcomeMessage.classList.add("is-visible");
+        entryScreen.hidden = true;
+        celebrationView.hidden = false;
+        celebrationView.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, animationDelay);
+    }, { once: true });
+
+    galleryButton.addEventListener("click", () => {
+      const isExpanded = galleryButton.getAttribute("aria-expanded") === "true";
+      galleryButton.setAttribute("aria-expanded", String(!isExpanded));
+      memoryGallery.hidden = isExpanded;
+
+      if (!isExpanded) {
+        memoryGallery.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        galleryButton.focus();
+      }
+    });
+
+    backButton.addEventListener("click", () => {
+      memoryGallery.hidden = true;
+      galleryButton.setAttribute("aria-expanded", "false");
+      galleryButton.focus();
+      celebrationView.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  </script>
+</body>
+</html>
